@@ -6,6 +6,8 @@ export default async function Home({ params }: PageProps<'/[lang]'>) {
   if (!hasLocale(lang)) notFound()
   const dict = await getDictionary(lang)
   return (
-    <main></main>
+    <main>
+      <div className="h-600"></div>
+    </main>
   );
 }

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Navbar from "./components/navbar";
 import { notFound } from "next/navigation";
 import { getDictionary, hasLocale } from "./dictionaries";
 
@@ -18,7 +19,10 @@ export default async function RootLayout({ children, params, }: LayoutProps<"/[l
   const dict = await getDictionary(lang)
   return (
     <html lang={lang} className="h-full antialiased">
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Navbar dict={dict} />
+        {children}
+      </body>
     </html>
   );
 }
