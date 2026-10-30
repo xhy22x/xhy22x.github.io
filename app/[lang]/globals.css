@@ -18,3 +18,16 @@ body {
   color: var(--foreground);
   font-family: var(--font-mono);
 }
+
+/* components */
+.cursor {
+  display: inline-block;
+  width: 8px;
+  height: 16px;
+  background: #ffffff;
+  vertical-align: middle;
+  animation: blink 0.9s steps(2) infinite;
+}
+@keyframes blink {
+  50% { opacity: 0; }
+}

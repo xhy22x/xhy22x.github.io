@@ -18,7 +18,7 @@ export default async function RootLayout({ children, params, }: LayoutProps<"/[l
   if (!hasLocale(lang)) notFound()
   const dict = await getDictionary(lang)
   return (
-    <html lang={lang} className="h-full antialiased">
+    <html lang={lang} className="h-full antialiased snap-y snap-proximity scroll-smooth">
       <body className="min-h-full flex flex-col">
         <Navbar dict={dict} />
         {children}
