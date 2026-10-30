@@ -1,0 +1,24 @@
+import type { Metadata } from "next";
+import "./globals.css";
+import { notFound } from "next/navigation";
+import { getDictionary, hasLocale } from "./dictionaries";
+
+export const metadata: Metadata = {
+  title: "xhy22x.exe",
+  description: "Personal portofolio of xhy22x",
+};
+
+export async function generateStaticParams() {
+  return [{ lang: 'en' }, { lang: 'fr' }]
+}
+
+export default async function RootLayout({ children, params, }: LayoutProps<"/[lang]">) {
+  const { lang } = await params
+  if (!hasLocale(lang)) notFound()
+  const dict = await getDictionary(lang)
+  return (
+    <html lang={lang} className="h-full antialiased">
+      <body className="min-h-full flex flex-col">{children}</body>
+    </html>
+  );
+}
