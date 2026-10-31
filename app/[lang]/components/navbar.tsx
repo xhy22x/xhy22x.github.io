@@ -35,6 +35,15 @@ export default function Navbar({ dict }: { dict: Awaited<ReturnType<typeof getDi
         return () => { window.removeEventListener("scroll", handleScroll);}
     }, [isOpen]);
 
+    useEffect(() => {
+        const savedScroll = sessionStorage.getItem("scrolling");
+        if (savedScroll === null) return;
+        requestAnimationFrame(() => {
+            window.scrollTo(0, Number(savedScroll));
+            sessionStorage.removeItem("scrolling");
+        })
+    }, []);
+
     function toogleMenu() {
         if (!isOpen) scrollAtY.current = window.scrollY;
         setOpen(!isOpen);
@@ -53,7 +62,7 @@ export default function Navbar({ dict }: { dict: Awaited<ReturnType<typeof getDi
                         <a href="#contact" className={`transition-colors duration-300 ease-in-out hover:text-white ${activeSection === 'contact' ? 'text-white' : 'text-white/60'}`} onClick={() => setOpen(false)}>{dict.navbar.contact}</a>
                     </div>
                 </div>
-                <button className="cursor-pointer rounded-sm border border-white/10 bg-white/3 hover:bg-white/6 duration-400 px-2" onClick={() => {const path = pathname.replace(`/${lang}`, `/${nextLang}`); window.location.assign(path + window.location.search + window.location.hash)}}>
+                <button className="cursor-pointer rounded-sm border border-white/10 bg-white/3 hover:bg-white/6 duration-400 px-2" onClick={() => {sessionStorage.setItem("scrolling", String(window.scrollY)); const path = pathname.replace(`/${lang}`, `/${nextLang}`); window.location.assign(path + window.location.search)}}>
                     {nextLang.toUpperCase()}
                 </button>
                 <button className="cursor-pointer rounded-xs border border-white hover:bg-white/6 duration-400 w-8 md:hidden" onClick={toogleMenu} >
