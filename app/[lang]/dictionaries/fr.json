@@ -3,5 +3,12 @@
         "about": "/a-propos",
         "projects": "/projets",
         "contact": "/contact"
+    },
+    "about": {
+        "title": "à propos de moi",
+        "building-skills": "Développement de mes compétences",
+        "building-skills-description": "Je développe mes compétences grâce à la pratique.",
+        "education-details": ["Bachelor 3 Cybersécurité (B3) → cycle Master", "Oteria Cyber School · 2026–2029", "", "BUT Informatique", "IUT Paris Rives de Seine · 2024–2026"],
+        "interests": ["Sécurité offensive", "Tests d'intrusion", "Programmation", "Linux", "Réseaux", "Cryptographie", "Mathématiques"]
     }
 }

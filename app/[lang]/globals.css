@@ -19,6 +19,23 @@ body {
   font-family: var(--font-mono);
 }
 
+h2 {
+  font-family: var(--font-pixel);
+  font-size: 1rem;
+  text-transform: uppercase;
+}
+
+section > h2{
+  filter: drop-shadow(0 0 0.1px white);
+  font-size: 1.25rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+section > h2::before{
+  content: "> ";
+  font-size: 1.25rem;
+}
+
 /* components */
 .cursor {
   display: inline-block;

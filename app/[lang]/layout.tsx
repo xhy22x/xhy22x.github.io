@@ -6,7 +6,7 @@ import { getDictionary, hasLocale } from "./dictionaries";
 
 export const metadata: Metadata = {
   title: "xhy22x.exe",
-  description: "Personal portofolio of xhy22x",
+  description: "Personal portfolio of xhy22x",
 };
 
 export async function generateStaticParams() {
