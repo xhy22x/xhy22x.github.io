@@ -1,38 +1,84 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 
+type SpotifyController = {
+    restart: () => void
+    resume: () => void
+    pause: () => void
+    destroy: () => void
+}
+
+type SpotifyApi = {
+    createController: (
+        element: HTMLElement,
+        options: {
+            uri: string
+            width: string
+            height: string
+            theme: string
+        },
+        callback: (controller: SpotifyController) => void
+    ) => void
+}
+
 declare global {
   interface Window {
-    onSpotifyIframeApiReady?: (api: any) => void
+    onSpotifyIframeApiReady?: (api: SpotifyApi) => void
   }
 }
 
-export default function SpotifyPopup() {
+let spotifyApiPromise: Promise<SpotifyApi> | null = null
+
+function loadSpotifyApi(): Promise<SpotifyApi> {
+    if (!spotifyApiPromise) {
+        spotifyApiPromise = new Promise((resolve, reject) => {
+
+            window.onSpotifyIframeApiReady = resolve
+
+            const script = document.createElement("script")
+            script.src = "https://open.spotify.com/embed/iframe-api/v1"
+            script.async = true
+
+            script.onerror = () => {
+                spotifyApiPromise = null
+                reject(new Error("Unable to load Spotify API"))
+            }
+
+            document.body.appendChild(script)
+        })
+    }
+
+    return spotifyApiPromise
+}
+
+export default function Spotify() {
     const [open, setOpen] = useState(false)
     const popupRef = useRef<HTMLDivElement>(null)
     const container = useRef<HTMLDivElement>(null)
     const player = useRef<any>(null)
 
     useEffect(() => {
-      window.onSpotifyIframeApiReady = (api) => {
-        if (!container.current) return
+      let cancelled = false
+      let controller: SpotifyController | null = null
+      
+      loadSpotifyApi().then((api) => {
+        if (cancelled || !container.current) return
 
         api.createController(
           container.current,
           { uri: 'spotify:playlist:6DxuTf7rpJdnni4hGnlNLq', width: '100%', height: '352', theme: 'dark' },
-          (controller: any) => {
-            player.current = controller
+          (createdController) => {
+            if (cancelled) {createdController.destroy(); return}
+            controller = createdController
+            player.current = createdController
           }
         )
-      }
-      const script = document.createElement('script')
-      script.src = 'https://open.spotify.com/embed/iframe-api/v1'
-      script.async = true
-      document.body.appendChild(script)
-
+      }).catch(console.error)
+    
       return () => {
-        script.remove()
-        delete window.onSpotifyIframeApiReady
+        cancelled = true
+        controller?.destroy()
+        if (player.current === controller) player.current = null
       }
     }, [])
 
@@ -93,7 +139,7 @@ export default function SpotifyPopup() {
           </a>
         </div>
         
-        <button className='fixed bottom-6 right-6 z-50 cursor-pointer shadow-[0_0_5px_2px_rgba(255,255,255,0.15)] bg-black border border-white text-xl w-12 h-12' onClick={() => setOpen((value) => !value)}>♫</button>
+        <button className='fixed bottom-6 right-6 z-50 cursor-pointer shadow-[0_0_5px_2px_rgba(255,255,255,0.15)] bg-black border border-white text-xl w-12 h-12' onClick={() => {const willOpen = !open; setOpen(willOpen); if (willOpen) player.current?.resume();}}>♫</button>
       </>
     )
 }

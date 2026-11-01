@@ -187,7 +187,7 @@ export default async function Home({ params }: PageProps<'/[lang]'>) {
             </div>
             {/* decorative image */}
             <div className="flex items-start justify-end">
-              <Image src="/sword.jpg" alt="sword" width={450} height={40} className="h-auto w-[300px] sm:w-[350px] md:w-[450px]" />
+              <Image src="/sword.jpg" alt="sword" width={450} height={40} className="w-[300px] sm:w-[350px] md:w-[450px]" style={{ height: 'auto' }} />
             </div>
           </div>
           {/* CV */}
