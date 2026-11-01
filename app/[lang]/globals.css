@@ -4,6 +4,7 @@
 :root {
   --background: #000000;
   --foreground: #ffffff;
+  interpolate-size: allow-keywords;
 }
 
 @theme inline {
@@ -47,4 +48,21 @@ section > h2::before{
 }
 @keyframes blink {
   50% { opacity: 0; }
+}
+
+.smooth-details {
+  interpolate-size: allow-keywords;
+}
+.smooth-details::details-content {
+  height: 0;
+  overflow: hidden;
+  transition: height 300ms ease, content-visibility 300ms allow-discrete;
+}
+.smooth-details[open]::details-content {
+  height: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  .smooth-details::details-content {
+    transition: none;
+  }
 }

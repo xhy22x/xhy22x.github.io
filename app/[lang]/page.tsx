@@ -1,15 +1,50 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { cacheLife } from "next/cache";
 import { getDictionary, hasLocale } from "./dictionaries";
+import { FaGithub } from "react-icons/fa";
 import skills from "./dictionaries/skills.json";
 import GalaxyAscii from "./components/galaxy-ascii";
 import Terminal from "./components/terminal";
 import Spotify from "./components/spotify";
+import { FaA } from "react-icons/fa6";
+
+type repo = {
+  id: number
+  name: string
+  html_url: string
+  pushed_at: string
+  description: string | null
+}
 
 export default async function Home({ params }: PageProps<'/[lang]'>) {
+  'use cache'
+  cacheLife('hours')
   const { lang } = await params
   if (!hasLocale(lang)) notFound()
   const dict = await getDictionary(lang)
+
+  const username = 'xhy22x'
+  const repos: repo[] = []
+  for (let page = 1; ; page++) {
+    const res = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}/repos?per_page=100&page=${page}`)
+    if (!res.ok) throw new Error(`Erreur Github : ${res.status}`)
+    const batch: repo[] = await res.json()
+    repos.push(...batch)
+    if (batch.length < 100) break
+  }
+
+  const reposWithLanguages = await Promise.all(
+    repos.map(async (repo) => {
+      const res = await fetch(`https://api.github.com/repos/${encodeURIComponent(username)}/${encodeURIComponent(repo.name)}/languages`)
+      if (!res.ok) throw new Error(`Github error: ${res.status}`)
+      const languages: Record<string, number> = await res.json()
+      return { ...repo, languages }
+    })
+  )
+
+  reposWithLanguages.sort((a, b) => new Date(b.pushed_at).getTime() - new Date(a.pushed_at).getTime())
+
   return (
     <main>
 
@@ -53,7 +88,7 @@ export default async function Home({ params }: PageProps<'/[lang]'>) {
                     </a>
                   </div>
                   <div className="border-2 border-t-white border-l-white/50 border-r-white/25 border-b-white/15">
-                    <a href="https://profile.hackthebox.com/profile/019e6341-4902-72a5-a53a-6005fc01024c" target="_blank" rel="noopener noreferrer" className="block uppercase font-pixel bg-white/80 text-xs text-black hover:text-black/80 hover:bg-white/75 px-1 py-2">
+                    <a href="https://profile.hackthebox.com/profile/019e6341-4902-72a5-a53a-6005fc01024c?utm_medium=copy_url" target="_blank" rel="noopener noreferrer" className="block uppercase font-pixel bg-white/80 text-xs text-black hover:text-black/80 hover:bg-white/75 px-1 py-2">
                       [hackthebox]
                     </a>
                   </div>
@@ -104,7 +139,39 @@ export default async function Home({ params }: PageProps<'/[lang]'>) {
         </div>
       </section>
 
-      <section id="projects" className="h-640">...</section>
+      <section id="projects" className="min-h-screen snap-start px-5 py-15 md:px-20 lg:px-30">
+        <h2>{dict.projects.title}</h2>
+        <div>
+          {reposWithLanguages.map((repo) => (
+            <article key={repo.id} className="font-pixel text-sm my-4">
+              <details name="github-repositories" className="smooth-details group">
+                <summary className="flex cursor-pointer list-none justify-between group-hover:text-red-900">
+                  <span className="text-[10px] sm:text-xs">{repo.name}/</span>
+                </summary>
+                
+                {/* repository information */}
+                <div className="border border-white/20 mt-3 mx-2 p-2">
+                  <p className="font-pixel border-b border-white/20 text-[10px] text-white/30 uppercase sm:text-[11px] pb-1 mb-2">[“] {dict.projects["repo-info"]}</p>
+                  <p className="font-sans text-[10px] text-white/40 uppercase sm:text-xs">{dict.projects.description}</p>
+                  <p className={`font-sans text-xs mt-1.5 mb-3 ${repo.description?.trim() ? "text-white/70" : "border-l-2 pl-1 text-red-900/80"}`}>{repo.description?.trim() || dict.projects["no-description"]}</p>
+                  <p className="font-sans text-[10px] text-white/40 uppercase sm:text-xs">{dict.projects.lang}</p>
+                  <ul className="font-sans flex flex-wrap gap-2 mt-1.5 mb-3">
+                      {Object.keys(repo.languages ?? {}).length > 0 ? (
+                          Object.keys(repo.languages).map((language) => (
+                              <li key={`${repo.id}-${language}`} className="border border-white/10 bg-white/10 px-1 py-0.5 text-[10px] text-white/60 sm:text-xs">
+                                  {language}
+                              </li>
+                          ))) : (<li className="text-red-900/80 border-l-2 pl-1 my-1">{dict.projects["not-specified"]}.</li>)}
+                  </ul>  
+                  <a href={repo.html_url} target="blank_" rel="noopener noreferrer" className="ml-auto flex w-fit items-center gap-2 border-2 border-t-white/20 border-l-white/10 border-r-black/25 border-b-black/50 bg-white/10 font-sans uppercase text-xs text-white/75 transition-all duration-350 ease-out hover:text-white hover:border-t-white/2 hover:border-l-white/4 hover:border-r-white/10 hover:border-b-white/15 hover:bg-white/5 active:translate-y-px active:scale-[0.98] active:bg-white/10 active:text-white active:border-t-black/40 active:border-l-black/40 active:border-r-white/20 active:border-b-white/20 px-2 py-1 mt-4 sm:mt-2"><FaGithub /><span>{dict.projects["view-repo"]}</span></a>
+                </div>
+              </details>
+              <hr className="border-white/10 mt-4" />
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section id="contact" className="h-640">...</section>
     </main>
   );

@@ -10,5 +10,14 @@
         "building-skills-description": "Focused on learning through hands-on practice.",
         "education-details": ["Cybersecurity — Bachelor 3 + Master's Cycle", "Oteria Cyber School · 2026–2029", "", "Computer Science Studies", "IUT Paris Rives de Seine · 2024–2026"],
         "interests": ["Offensive Security", "Pentesting", "Programming", "Linux", "Networking", "Cryptography", "Mathematics"]
+    },
+    "projects": {
+        "title": "projects",
+        "repo-info": "repository info",
+        "description": "description",
+        "lang": "languages",
+        "view-repo": "view repository",
+        "not-specified": "Not specified",
+        "no-description": "No description provided"
     }
 }
