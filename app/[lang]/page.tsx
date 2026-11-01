@@ -1,13 +1,11 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { cacheLife } from "next/cache";
 import { getDictionary, hasLocale } from "./dictionaries";
 import { FaGithub, FaLinkedin, FaEnvelope, FaFile } from "react-icons/fa";
 import skills from "./dictionaries/skills.json";
 import GalaxyAscii from "./components/galaxy-ascii";
 import Terminal from "./components/terminal";
 import Spotify from "./components/spotify";
-import { FaA } from "react-icons/fa6";
 
 type repo = {
   id: number
@@ -18,8 +16,6 @@ type repo = {
 }
 
 export default async function Home({ params }: PageProps<'/[lang]'>) {
-  'use cache'
-  cacheLife('hours')
   const { lang } = await params
   if (!hasLocale(lang)) notFound()
   const dict = await getDictionary(lang)
