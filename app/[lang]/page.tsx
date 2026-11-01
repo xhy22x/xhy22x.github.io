@@ -150,20 +150,20 @@ export default async function Home({ params }: PageProps<'/[lang]'>) {
                 </summary>
                 
                 {/* repository information */}
-                <div className="border border-white/20 mt-3 mx-2 p-2">
-                  <p className="font-pixel border-b border-white/20 text-[10px] text-white/30 uppercase sm:text-[11px] pb-1 mb-2">[“] {dict.projects["repo-info"]}</p>
-                  <p className="font-sans text-[10px] text-white/40 uppercase sm:text-xs">{dict.projects.description}</p>
-                  <p className={`font-sans text-xs mt-1.5 mb-3 ${repo.description?.trim() ? "text-white/70" : "border-l-2 pl-1 text-red-900/80"}`}>{repo.description?.trim() || dict.projects["no-description"]}</p>
-                  <p className="font-sans text-[10px] text-white/40 uppercase sm:text-xs">{dict.projects.lang}</p>
+                <div className="border border-white mt-3 mx-2 md:mt-5 p-3">
+                  <p className="font-pixel border-b border-white/60 text-[10px] text-white uppercase sm:text-[11px] md:text-sm pb-1 mb-2">[“] {dict.projects["repo-info"]}</p>
+                  <p className="font-mono font-bold text-[10px] text-white/80 uppercase sm:text-xs md:text-sm">{dict.projects.description}</p>
+                  <p className={`font-sans text-xs md:text-sm mt-1.5 mb-3 ${repo.description?.trim() ? "text-white/60" : "border-l-2 pl-1 text-red-900/80"}`}>{repo.description?.trim() || dict.projects["no-description"]}</p>
+                  <p className="font-mono font-bold text-[10px] text-white/80 uppercase sm:text-xs md:text-sm">{dict.projects.lang}</p>
                   <ul className="font-sans flex flex-wrap gap-2 mt-1.5 mb-3">
                       {Object.keys(repo.languages ?? {}).length > 0 ? (
                           Object.keys(repo.languages).map((language) => (
-                              <li key={`${repo.id}-${language}`} className="border border-white/10 bg-white/10 px-1 py-0.5 text-[10px] text-white/60 sm:text-xs">
+                              <li key={`${repo.id}-${language}`} className="border border-white/10 bg-white/10 px-2 py-0.5 text-[10px] text-white/60 sm:text-xs md:text-sm">
                                   {language}
                               </li>
                           ))) : (<li className="text-red-900/80 border-l-2 pl-1 my-1">{dict.projects["not-specified"]}.</li>)}
                   </ul>  
-                  <a href={repo.html_url} target="blank_" rel="noopener noreferrer" className="ml-auto flex w-fit items-center gap-2 border-2 border-t-white/20 border-l-white/10 border-r-black/25 border-b-black/50 bg-white/10 font-sans uppercase text-xs text-white/75 transition-all duration-350 ease-out hover:text-white hover:border-t-white/2 hover:border-l-white/4 hover:border-r-white/10 hover:border-b-white/15 hover:bg-white/5 active:translate-y-px active:scale-[0.98] active:bg-white/10 active:text-white active:border-t-black/40 active:border-l-black/40 active:border-r-white/20 active:border-b-white/20 px-2 py-1 mt-4 sm:mt-2"><FaGithub /><span>{dict.projects["view-repo"]}</span></a>
+                  <a href={repo.html_url} target="blank_" rel="noopener noreferrer" className="ml-auto flex w-fit items-center gap-2 border-2 border-t-white/20 border-l-white/10 border-r-black/25 border-b-black/50 bg-white/10 font-sans uppercase text-xs text-white/75 transition-all duration-350 ease-out hover:text-white hover:border-t-white/2 hover:border-l-white/4 hover:border-r-white/10 hover:border-b-white/15 hover:bg-white/5 active:translate-y-px active:scale-[0.98] active:bg-white/10 active:text-white active:border-t-black/40 active:border-l-black/40 active:border-r-white/20 active:border-b-white/20 md:text-sm px-2 py-1 mt-4 sm:mt-2"><FaGithub /><span>{dict.projects["view-repo"]}</span></a>
                 </div>
               </details>
               <hr className="border-white/10 mt-4" />
