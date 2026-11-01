@@ -2,7 +2,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { cacheLife } from "next/cache";
 import { getDictionary, hasLocale } from "./dictionaries";
-import { FaGithub } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaEnvelope, FaFile } from "react-icons/fa";
 import skills from "./dictionaries/skills.json";
 import GalaxyAscii from "./components/galaxy-ascii";
 import Terminal from "./components/terminal";
@@ -172,7 +172,33 @@ export default async function Home({ params }: PageProps<'/[lang]'>) {
         </div>
       </section>
 
-      <section id="contact" className="h-640">...</section>
+      <section id="contact" className="min-h-screen snap-start px-5 py-15 md:px-20 lg:px-30">
+        <h2>contact</h2> 
+        <div className="space-y-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            {/* contact details */}
+            <div className="space-y-8">
+              <p className="text-xs sm:text-base">{dict.contact.description}</p>
+              <div className="flex gap-6 justify-center md:justify-start">
+                <a href="https://github.com/xhy22x" target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-full border border-white/60 hover:bg-white/5"><FaGithub size={20} /></a>
+                <a href="https://www.linkedin.com/in/xhy22x/" target="_blank" rel="noopener noreferrer" className="flex h-12 w-12 items-center justify-center rounded-full border border-white/60 hover:bg-white/5"><FaLinkedin size={20} /></a>
+                <a href="mailto:celia.xu@oteria.fr" className="flex h-12 w-12 items-center justify-center rounded-full border border-white/60 hover:bg-white/5"><FaEnvelope size={20} /></a>
+              </div>
+            </div>
+            {/* decorative image */}
+            <div className="flex items-start justify-end">
+              <Image src="/sword.jpg" alt="sword" width={450} height={40} className="h-auto w-[300px] sm:w-[350px] md:w-[450px]" />
+            </div>
+          </div>
+          {/* CV */}
+          <div className="flex justify-center">
+            <a href="https://drive.google.com/drive/folders/1LEiDW2rybWE53Q6Ax6GWttbpJFQ61kHR?usp=drive_link" target="_blank" rel="noopener noreferrer" className="flex w-full justify-center items-center gap-2 rounded-md bg-white/5 border border-white/10 shadow-[0_0_8px_rgba(255,255,255,0.10)] hover:bg-white/8 py-4">
+              <FaFile size={20} />
+              <span className="uppercase">{dict.contact["cv-link"]}</span>
+            </a>
+          </div>
+        </div>   
+      </section>
     </main>
   );
 }

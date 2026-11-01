@@ -19,5 +19,9 @@
         "view-repo": "view repository",
         "not-specified": "Not specified",
         "no-description": "No description provided"
+    },
+    "contact": {
+        "description": "I'm open to new opportunities and collaborations. Feel free to get in touch!",
+        "cv-link": "view my cv"
     }
 }
